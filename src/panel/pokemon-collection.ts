@@ -186,7 +186,7 @@ export function createPokemon(
       generation,
       originalSpriteSize,
     );
-  } catch (error) {
+  } catch {
     throw new InvalidPokemonException(`Invalid Pokemon type: ${pokemonType}`);
   }
 }

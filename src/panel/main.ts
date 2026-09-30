@@ -204,7 +204,7 @@ function addPokemonToPanel(
     pokeballEl,
   );
 
-  pokeballEl.offsetHeight;
+  void pokeballEl.offsetHeight;
   pokeballEl.classList.add('pokeball-open');
 
   // show pokemon earlier while pokeball animation is still running
@@ -316,7 +316,7 @@ function removePokemonFromPanel(
   ) as HTMLDivElement;
   container.appendChild(pokeballEl);
 
-  pokeballEl.offsetHeight;
+  void pokeballEl.offsetHeight;
   pokeballEl.classList.add('pokeball-close');
 
   pokemonSpriteElement.addEventListener(
@@ -408,7 +408,7 @@ function recoverState(
       );
       allPokemon.push(newPokemon);
       recoveryMap.set(newPokemon.pokemon, p);
-    } catch (InvalidPokemonException) {
+    } catch {
       console.log(
         'State had invalid pokemon (' + p.pokemonType + '), discarding.',
       );
