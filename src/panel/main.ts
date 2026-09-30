@@ -5,6 +5,7 @@ import {
   PokemonColor,
   PokemonType,
   Theme,
+  CENTER_THEMES,
   ColorThemeKind,
   WebviewMessage,
 } from '../common/types';
@@ -41,6 +42,9 @@ function normalizePokemonCounter(counter: number | undefined): number {
   return Math.max(0, counter);
 }
 
+// Center themes are transparent above the scene; this fills it unless the user picked a color
+const CENTER_DEFAULT_SKY_COLOR = '#7cc3ee';
+
 function calculateFloor(size: PokemonSize, theme: Theme): number {
   switch (theme) {
     case Theme.forest:
@@ -66,6 +70,18 @@ function calculateFloor(size: PokemonSize, theme: Theme): number {
         case PokemonSize.nano:
         default:
           return 45;
+      }
+    case Theme.hbt:
+      switch (size) {
+        case PokemonSize.small:
+          return 32;
+        case PokemonSize.medium:
+          return 40;
+        case PokemonSize.large:
+          return 64;
+        case PokemonSize.nano:
+        default:
+          return 24;
       }
     case Theme.beach:
       switch (size) {
@@ -463,6 +479,7 @@ export function pokemonPanelApp(
   throwBallWithMouse: boolean,
   gen: string,
   originalSpriteSize: number,
+  backgroundColor: string,
   stateApi?: VscodeStateApi,
 ) {
   var floor = 0;
@@ -486,16 +503,61 @@ export function pokemonPanelApp(
         break;
     }
 
-    document.body.style.backgroundImage = `url('${basePokemonUri}/backgrounds/${theme}/background-${_themeKind}-${pokemonSize}.png')`;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    foregroundEl!.style.backgroundImage = `url('${basePokemonUri}/backgrounds/${theme}/foreground-${_themeKind}-${pokemonSize}.png')`;
+    if (CENTER_THEMES.includes(theme)) {
+      // One image centered, a second one looped on both sides
+      const dir = `${basePokemonUri}/backgrounds/center/${theme}`;
+      document.body.style.backgroundImage = `url('${dir}/background-center-${_themeKind}-${pokemonSize}.png'), url('${dir}/background-loop-${_themeKind}-${pokemonSize}.png')`;
+      document.body.style.backgroundRepeat = 'no-repeat, repeat-x';
+      document.body.style.backgroundPosition = 'center bottom, center bottom';
+      document.body.style.backgroundSize = '';
+      // Tile the loop image so a tile boundary sits exactly on both edges of
+      // the center image: its width becomes centerWidth / whole-number-of-tiles.
+      const centerImg = new Image();
+      const loopImg = new Image();
+      let pending = 2;
+      const alignLoop = () => {
+        if (--pending > 0 || !centerImg.naturalWidth || !loopImg.naturalWidth) {
+          return;
+        }
+        const centerWidth = centerImg.naturalWidth;
+        const tiles = Math.max(
+          1,
+          Math.round(centerWidth / loopImg.naturalWidth),
+        );
+        const tileWidth = centerWidth / tiles;
+        // Heights match, so the loop keeps its natural height
+        document.body.style.backgroundSize = `${centerWidth}px ${centerImg.naturalHeight}px, ${tileWidth}px ${loopImg.naturalHeight}px`;
+        document.body.style.backgroundPosition = `center bottom, calc(50% - ${centerWidth / 2}px + ${tileWidth / 2}px) bottom`;
+      };
+      centerImg.onload = alignLoop;
+      loopImg.onload = alignLoop;
+      centerImg.src = `${dir}/background-center-${_themeKind}-${pokemonSize}.png`;
+      loopImg.src = `${dir}/background-loop-${_themeKind}-${pokemonSize}.png`;
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      foregroundEl!.style.backgroundImage = '';
+    } else {
+      document.body.style.backgroundImage = `url('${basePokemonUri}/backgrounds/loop/${theme}/background-${_themeKind}-${pokemonSize}.png')`;
+      document.body.style.backgroundRepeat = '';
+      document.body.style.backgroundPosition = '';
+      document.body.style.backgroundSize = '';
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      foregroundEl!.style.backgroundImage = `url('${basePokemonUri}/backgrounds/loop/${theme}/foreground-${_themeKind}-${pokemonSize}.png')`;
+    }
 
     floor = calculateFloor(pokemonSize, theme); // Themes have pokemonCollection at a specified height from the ground
   } else {
     document.body.style.backgroundImage = '';
+    document.body.style.backgroundRepeat = '';
+    document.body.style.backgroundPosition = '';
+    document.body.style.backgroundSize = '';
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     foregroundEl!.style.backgroundImage = '';
   }
+
+  // Background color sits behind the images; empty means the editor background
+  document.body.style.backgroundColor =
+    backgroundColor ||
+    (CENTER_THEMES.includes(theme) ? CENTER_DEFAULT_SKY_COLOR : '');
 
   console.log(
     'Starting pokemon session',

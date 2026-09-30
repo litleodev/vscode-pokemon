@@ -57,6 +57,7 @@ export const enum Theme {
   forest = 'forest',
   castle = 'castle',
   beach = 'beach',
+  hbt = 'hbt',
 }
 
 export const enum ColorThemeKind {
@@ -82,4 +83,12 @@ export const ALL_SCALES = [
   PokemonSize.medium,
   PokemonSize.large,
 ];
-export const ALL_THEMES = [Theme.none, Theme.forest, Theme.castle, Theme.beach];
+export const LOOP_THEMES = [
+  Theme.none,
+  Theme.forest,
+  Theme.castle,
+  Theme.beach,
+];
+// Center themes show one centered image, with a second image looped on both sides
+export const CENTER_THEMES = [Theme.hbt];
+export const ALL_THEMES = [...LOOP_THEMES, ...CENTER_THEMES];

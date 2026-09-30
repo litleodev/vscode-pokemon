@@ -213,10 +213,18 @@
                             "none",
                             "forest",
                             "castle",
-                            "beach"
+                            "beach",
+                            "hbt"
                         ],
                         "default": "none",
                         "description": "Background theme assets for your pokemon"
+                    },
+                    "vscode-pokemon.backgroundColor": {
+                        "type": "string",
+                        "default": "",
+                        "pattern": "^(#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8}))?$",
+                        "patternErrorMessage": "Use a hex color such as #87ceeb, or leave empty for the default",
+                        "description": "Background color behind the theme images (hex, e.g. #87ceeb). Leave empty for the default"
                     },
                     "vscode-pokemon.defaultPokemon": {
                         "type": "array",
