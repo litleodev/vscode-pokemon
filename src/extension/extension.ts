@@ -20,6 +20,8 @@ import {
   PokemonSize,
   PokemonType,
   Theme,
+  CENTER_THEMES,
+  LOOP_THEMES,
   WebviewMessage,
 } from '../common/types';
 import { availableColors, normalizeColor } from '../panel/pokemon-collection';
@@ -75,6 +77,62 @@ function getConfiguredTheme(): Theme {
     theme = DEFAULT_THEME;
   }
   return theme;
+}
+
+const HEX_COLOR_PATTERN =
+  /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
+
+// Empty string means "use the default background"
+function getConfiguredBackgroundColor(): string {
+  const color = vscode.workspace
+    .getConfiguration('vscode-pokemon')
+    .get<string>('backgroundColor', '');
+  return HEX_COLOR_PATTERN.test(color) ? color : '';
+}
+
+const BACKGROUND_COLOR_PRESETS = [
+  { label: 'Sky blue', color: '#7cc3ee' },
+  { label: 'Night', color: '#0b1d3a' },
+  { label: 'Sunset', color: '#f4a261' },
+  { label: 'Meadow', color: '#8fcf8f' },
+];
+
+async function pickBackgroundColor(): Promise<string | undefined> {
+  const current = getConfiguredBackgroundColor();
+  const items: (vscode.QuickPickItem & { color?: string; custom?: boolean })[] =
+    [
+      {
+        label: vscode.l10n.t('Default'),
+        description: current === '' ? vscode.l10n.t('Current') : undefined,
+        color: '',
+      },
+      ...BACKGROUND_COLOR_PRESETS.map((preset) => ({
+        label: vscode.l10n.t(preset.label),
+        description:
+          preset.color === current
+            ? `${preset.color} (${vscode.l10n.t('Current')})`
+            : preset.color,
+        color: preset.color,
+      })),
+      { label: vscode.l10n.t('Custom...'), custom: true },
+    ];
+  const picked = await vscode.window.showQuickPick(items, {
+    placeHolder: vscode.l10n.t('Select a background color'),
+  });
+  if (!picked) {
+    return undefined;
+  }
+  if (picked.custom) {
+    return vscode.window.showInputBox({
+      prompt: vscode.l10n.t('Enter a hex color, e.g. #87ceeb'),
+      value: current,
+      validateInput: (value) =>
+        HEX_COLOR_PATTERN.test(value)
+          ? undefined
+          : vscode.l10n.t('Invalid hex color'),
+    });
+  }
+  return picked.color;
 }
 
 function getConfiguredThemeKind(): ColorThemeKind {
@@ -506,7 +564,29 @@ export function activate(context: vscode.ExtensionContext) {
       'vscode-pokemon.change-background',
       async () => {
         const current = getConfiguredTheme();
-        const items = ALL_THEMES.map((theme) => ({
+        const currentMode = CENTER_THEMES.includes(current) ? 'center' : 'loop';
+        const mode = await vscode.window.showQuickPick(
+          [
+            {
+              label: vscode.l10n.t('Loop'),
+              description:
+                currentMode === 'loop' ? vscode.l10n.t('Current') : undefined,
+              mode: 'loop',
+            },
+            {
+              label: vscode.l10n.t('Center'),
+              description:
+                currentMode === 'center' ? vscode.l10n.t('Current') : undefined,
+              mode: 'center',
+            },
+          ],
+          { placeHolder: vscode.l10n.t('Select a background type') },
+        );
+        if (!mode) {
+          return;
+        }
+        const themes = mode.mode === 'center' ? CENTER_THEMES : LOOP_THEMES;
+        const items = themes.map((theme) => ({
           label:
             theme === Theme.none
               ? vscode.l10n.t('None')
@@ -517,10 +597,23 @@ export function activate(context: vscode.ExtensionContext) {
         const selected = await vscode.window.showQuickPick(items, {
           placeHolder: vscode.l10n.t('Select a background'),
         });
-        if (selected && selected.theme !== current) {
+        if (!selected) {
+          return;
+        }
+        if (selected.theme !== current) {
           await vscode.workspace
             .getConfiguration('vscode-pokemon')
             .update('theme', selected.theme, vscode.ConfigurationTarget.Global);
+        }
+        const color = await pickBackgroundColor();
+        if (color !== undefined && color !== getConfiguredBackgroundColor()) {
+          await vscode.workspace
+            .getConfiguration('vscode-pokemon')
+            .update(
+              'backgroundColor',
+              color,
+              vscode.ConfigurationTarget.Global,
+            );
         }
       },
     ),
@@ -1110,6 +1203,7 @@ export function activate(context: vscode.ExtensionContext) {
           e.affectsConfiguration('vscode-pokemon.pokemonType') ||
           e.affectsConfiguration('vscode-pokemon.pokemonSize') ||
           e.affectsConfiguration('vscode-pokemon.theme') ||
+          e.affectsConfiguration('vscode-pokemon.backgroundColor') ||
           e.affectsConfiguration('workbench.colorTheme')
         ) {
           const spec = PokemonSpecification.fromConfiguration();
@@ -1450,6 +1544,7 @@ class PokemonWebviewContainer implements IPokemonPanel {
                         "${this.throwBallWithMouse()}",
                         "${this.pokemonGeneration()}",
                         "${this.pokemonOriginalSpriteSize()}",
+                        "${getConfiguredBackgroundColor()}",
                     );
                 </script>
             </body>
