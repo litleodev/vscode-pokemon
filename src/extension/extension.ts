@@ -503,6 +503,31 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.commands.registerCommand(
+      'vscode-pokemon.change-background',
+      async () => {
+        const current = getConfiguredTheme();
+        const items = ALL_THEMES.map((theme) => ({
+          label:
+            theme === Theme.none
+              ? vscode.l10n.t('None')
+              : theme.charAt(0).toUpperCase() + theme.slice(1),
+          description: theme === current ? vscode.l10n.t('Current') : undefined,
+          theme,
+        }));
+        const selected = await vscode.window.showQuickPick(items, {
+          placeHolder: vscode.l10n.t('Select a background'),
+        });
+        if (selected && selected.theme !== current) {
+          await vscode.workspace
+            .getConfiguration('vscode-pokemon')
+            .update('theme', selected.theme, vscode.ConfigurationTarget.Global);
+        }
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
       'vscode-pokemon.delete-pokemon',
       async () => {
         const panel = getPokemonPanel();

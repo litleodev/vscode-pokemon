@@ -1,4 +1,7 @@
 {
+  "None": "None",
+  "Current": "Current",
+  "Select a background": "Select a background",
   "Spawn Pokemon": "Spawn Pokemon",
   "Pokemon Panel": "Pokemon Panel",
   "Pokemon language changed to {0}. The change will persist after restart.": "Pokemon language changed to {0}. The change will persist after restart.",

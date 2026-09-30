@@ -1,4 +1,7 @@
 {
+  "None": "なし",
+  "Current": "現在",
+  "Select a background": "背景を選択",
   "Spawn Pokemon": "ポケモンを出現させる",
   "Pokemon Panel": "ポケモンパネル",
   "Pokemon language changed to {0}. The change will persist after restart.": "ポケモンの言語が{0}に変更されました。この変更は再起動後も保持されます。",
