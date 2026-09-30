@@ -1,4 +1,7 @@
 {
+  "None": "Aucun",
+  "Current": "Actuel",
+  "Select a background": "Sélectionner un arrière-plan",
 	"A Pokemon Playground has been created. You can now use the \"Remove All Pokemon\" Command to remove all Pokemon.": "Un Centre Pokémon a été créé. Vous pouvez maintenant utiliser la commande \"Retirer tous les Pokémon\" pour retirer tous les Pokémon.",
 	"A Pokemon Playground has been created. You can now use the \"Spawn Additional Pokemon\" Command to add more Pokemon.": "Un Centre Pokémon a été créé. Vous pouvez maintenant utiliser la commande \"Faire apparaître un Pokémon supplémentaire\" pour ajouter plus de Pokémon.",
 	"Browse Gen {0} Pokémon": "Parcourir les Pokémon de Gen {0}",

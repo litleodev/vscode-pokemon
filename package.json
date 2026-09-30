@@ -33,6 +33,7 @@
         "onCommand:vscode-pokemon.start",
         "onCommand:vscode-pokemon.spawn-pokemon",
         "onCommand:vscode-pokemon.spawn-random-pokemon",
+        "onCommand:vscode-pokemon.change-background",
         "onCommand:vscode-pokemon.delete-pokemon",
         "onCommand:vscode-pokemon.remove-all-pokemon",
         "onCommand:vscode-pokemon.roll-call",
@@ -64,6 +65,11 @@
                 {
                     "command": "vscode-pokemon.spawn-pokemon",
                     "when": "view == pokemonView",
+                    "group": "navigation@0"
+                },
+                {
+                    "command": "vscode-pokemon.change-background",
+                    "when": "view == pokemonView",
                     "group": "navigation@1"
                 },
                 {
@@ -79,6 +85,15 @@
             ]
         },
         "commands": [
+            {
+                "command": "vscode-pokemon.change-background",
+                "title": "Change background",
+                "category": "Pokemon Coding",
+                "icon": {
+                    "dark": "media/icon/dark-background.svg",
+                    "light": "media/icon/light-background.svg"
+                }
+            },
             {
                 "command": "vscode-pokemon.start",
                 "title": "Start pokemon coding session",
