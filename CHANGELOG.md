@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-pokemon" extension will be documented in this file.
 
+## [5.1.0]
+
+- feat: add hbt center background theme and background color option
+- feat: add change background button to view title
+
 ## [5.0.2]
 
 - fix: Galvantual assets
