@@ -888,8 +888,7 @@ export function activate(context: vscode.ExtensionContext) {
           setGenerationOnlyItems();
 
           let selectedPokemonType:
-            | { label: string; value: PokemonType }
-            | undefined;
+            { label: string; value: PokemonType } | undefined;
 
           const disposables: vscode.Disposable[] = [];
 
@@ -1340,7 +1339,7 @@ class PokemonWebviewContainer implements IPokemonPanel {
   }
 
   // #TODO: verify if this is needed
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+
   public update() {}
 
   protected _getHtmlForWebview(webview: vscode.Webview) {
