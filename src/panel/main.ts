@@ -74,14 +74,14 @@ function calculateFloor(size: PokemonSize, theme: Theme): number {
     case Theme.hbt:
       switch (size) {
         case PokemonSize.small:
-          return 32;
+          return 6;
         case PokemonSize.medium:
-          return 40;
+          return 7;
         case PokemonSize.large:
-          return 64;
+          return 12;
         case PokemonSize.nano:
         default:
-          return 24;
+          return 4;
       }
     case Theme.beach:
       switch (size) {
