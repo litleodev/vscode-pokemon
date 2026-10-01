@@ -2,7 +2,7 @@
     "name": "vscode-pokemon",
     "displayName": "vscode-pokemon",
     "description": "Pokémon for your VS Code",
-    "version": "5.2.1",
+    "version": "5.2.2",
     "engines": {
         "vscode": "^1.138.0"
     },
