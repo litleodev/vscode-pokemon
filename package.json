@@ -2,7 +2,7 @@
     "name": "vscode-pokemon",
     "displayName": "vscode-pokemon",
     "description": "Pokémon for your VS Code",
-    "version": "5.1.0",
+    "version": "5.2.0",
     "engines": {
         "vscode": "^1.138.0"
     },
@@ -214,7 +214,8 @@
                             "forest",
                             "castle",
                             "beach",
-                            "hbt"
+                            "hbt",
+                            "rikkei"
                         ],
                         "default": "none",
                         "description": "Background theme assets for your pokemon"
