@@ -42,9 +42,6 @@ function normalizePokemonCounter(counter: number | undefined): number {
   return Math.max(0, counter);
 }
 
-// Center themes are transparent above the scene; this fills it unless the user picked a color
-const CENTER_DEFAULT_SKY_COLOR = '#7cc3ee';
-
 function calculateFloor(size: PokemonSize, theme: Theme): number {
   switch (theme) {
     case Theme.forest:
@@ -567,10 +564,8 @@ export function pokemonPanelApp(
     foregroundEl!.style.backgroundImage = '';
   }
 
-  // Background color sits behind the images; empty means the editor background
-  document.body.style.backgroundColor =
-    backgroundColor ||
-    (CENTER_THEMES.includes(theme) ? CENTER_DEFAULT_SKY_COLOR : '');
+  // Background color sits behind the images; empty (None) sets nothing
+  document.body.style.backgroundColor = backgroundColor;
 
   console.log(
     'Starting pokemon session',

@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-pokemon" extension will be documented in this file.
 
+## [5.2.1]
+
+- fix: rename default background color option to None and stop applying a fallback sky color
+
 ## [5.2.0]
 
 - feat: add rikkei center background theme
