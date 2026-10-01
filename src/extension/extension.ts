@@ -82,7 +82,7 @@ function getConfiguredTheme(): Theme {
 const HEX_COLOR_PATTERN =
   /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 
-// Empty string means "use the default background"
+// Empty string means "None": no background color is set
 function getConfiguredBackgroundColor(): string {
   const color = vscode.workspace
     .getConfiguration('vscode-pokemon')
@@ -102,7 +102,7 @@ async function pickBackgroundColor(): Promise<string | undefined> {
   const items: (vscode.QuickPickItem & { color?: string; custom?: boolean })[] =
     [
       {
-        label: vscode.l10n.t('Default'),
+        label: vscode.l10n.t('None'),
         description: current === '' ? vscode.l10n.t('Current') : undefined,
         color: '',
       },
