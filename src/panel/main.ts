@@ -83,6 +83,19 @@ function calculateFloor(size: PokemonSize, theme: Theme): number {
         default:
           return 4;
       }
+    case Theme.rikkei:
+      // Pets walk on the wooden floor, just above the base strip
+      switch (size) {
+        case PokemonSize.small:
+          return 12;
+        case PokemonSize.medium:
+          return 14;
+        case PokemonSize.large:
+          return 23;
+        case PokemonSize.nano:
+        default:
+          return 10;
+      }
     case Theme.beach:
       switch (size) {
         case PokemonSize.small:

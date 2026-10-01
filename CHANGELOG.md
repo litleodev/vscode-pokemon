@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-pokemon" extension will be documented in this file.
 
+## [5.2.0]
+
+- feat: add rikkei center background theme
+
 ## [5.1.0]
 
 - feat: add hbt center background theme and background color option

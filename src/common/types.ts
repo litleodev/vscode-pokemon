@@ -58,6 +58,7 @@ export const enum Theme {
   castle = 'castle',
   beach = 'beach',
   hbt = 'hbt',
+  rikkei = 'rikkei',
 }
 
 export const enum ColorThemeKind {
@@ -90,5 +91,5 @@ export const LOOP_THEMES = [
   Theme.beach,
 ];
 // Center themes show one centered image, with a second image looped on both sides
-export const CENTER_THEMES = [Theme.hbt];
+export const CENTER_THEMES = [Theme.hbt, Theme.rikkei];
 export const ALL_THEMES = [...LOOP_THEMES, ...CENTER_THEMES];
